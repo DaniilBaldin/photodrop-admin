@@ -7,7 +7,6 @@ import { routes, protectedRoutes } from './routes';
 import { useSelector } from 'react-redux';
 
 import { token } from '../store/selectors/tokenSelector';
-
 import { RootState } from '../store';
 
 type RouterType = {

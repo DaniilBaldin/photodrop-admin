@@ -5,4 +5,6 @@ export const MainPage = styled.section`
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    overflow-x: auto;
 `;
