@@ -1,23 +1,9 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
 
-import { Layout } from './Components/Layout/Layout';
-import { Login } from './Pages/Login';
+import { Router } from './routes/Router';
 
 function App() {
-    return (
-        <Routes>
-            <Route
-                path='/'
-                element={<Layout />}
-            >
-                <Route
-                    path='/'
-                    element={<Login />}
-                />
-            </Route>
-        </Routes>
-    );
+    return <Router />;
 }
 
 export default App;
