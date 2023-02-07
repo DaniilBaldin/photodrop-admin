@@ -47,7 +47,7 @@ export const Login: FC = () => {
         event.preventDefault();
 
         try {
-            const response = await fetch(`${baseUrl}login`, {
+            const response = await fetch(`${baseUrl}/login`, {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json',
