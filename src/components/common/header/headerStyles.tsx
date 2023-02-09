@@ -19,3 +19,14 @@ export const LogoutButton = styled.button`
     font-size: 1rem;
     color: navy;
 `;
+
+export const CreateAlbumButton = styled.button`
+    width: 200px;
+    height: 30px;
+    margin: 15px 50px 10px 10px;
+    border: none;
+    background-color: transparent;
+    font-weight: 700;
+    font-size: 1rem;
+    color: navy;
+`;

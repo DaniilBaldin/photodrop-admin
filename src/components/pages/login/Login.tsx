@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 
 import { useDispatch } from 'react-redux';
-import { addToken } from '../../../store/actions/actions';
+import { addToken } from '@/store/actions/actions';
 
 import { MainPage, TextTitle, LoginForm, LoginLabel, Input, LoginButton, InfoMessage } from './loginStyles';
 
