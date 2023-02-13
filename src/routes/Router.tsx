@@ -1,13 +1,13 @@
 import React, { FC, FunctionComponent } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { Layout } from '@/components/common/layout/Layout';
+import { Layout } from '~/components/common/layout/Layout';
 
 import { routes, protectedRoutes } from './routes';
 
 import { useSelector } from 'react-redux';
 
-import { token } from '@/store/selectors/tokenSelector';
-import { RootState } from '@/store/index';
+import { token } from '~/store/selectors/tokenSelector';
+import { RootState } from '~/store/index';
 
 type RouterType = {
     path: string;

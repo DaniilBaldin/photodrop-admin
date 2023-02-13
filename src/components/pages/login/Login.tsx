@@ -1,25 +1,11 @@
 import React, { FC, useState } from 'react';
 
 import { useDispatch } from 'react-redux';
-import { addToken } from '@/store/actions/actions';
+import { addToken } from '~/store/actions/actions';
 
 import { MainPage, TextTitle, LoginForm, LoginLabel, Input, LoginButton, InfoMessage } from './loginStyles';
 
-type loginResponse = {
-    logged: boolean;
-    token: {
-        accessToken: string;
-    };
-    user: {
-        person_id: number;
-        login: string;
-    };
-};
-
-type errorResponse = {
-    message: string;
-    logged: boolean;
-};
+import { loginResponse, errorResponse } from '~/api/types/login';
 
 export const Login: FC = () => {
     const [login, setLogin] = useState<string>('');

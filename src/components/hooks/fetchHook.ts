@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 export const fetchHook = <T>(method: string, slug: string, body?: BodyInit, headers?: HeadersInit) => {
     const [data, setData] = useState<T | null>(null);

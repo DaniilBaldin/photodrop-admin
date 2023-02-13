@@ -48,14 +48,13 @@ export const P = styled.p`
     font-weight: 600;
 `;
 
-export const PhotoCard = styled.button<{ image: string }>`
+export const PhotoCard = styled.img`
     width: 200px;
     height: 200px;
     margin: 10px;
     border-radius: 100px;
     object-fit: cover;
     border: 0.2px solid white;
-    background-image: ${(props) => (props.image ? `url(${props.image})` : 'linear-gradient( #f9f7f7, navy)')};
     background-repeat: no-repeat;
     background-size: cover;
 `;

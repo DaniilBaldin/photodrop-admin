@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useSelector } from 'react-redux';
-import { RootState } from '@/store/index';
-import { token } from '@/store/selectors/tokenSelector';
+import { RootState } from '~/store/index';
+import { token } from '~/store/selectors/tokenSelector';
 
 import {
     Modal,
@@ -16,24 +16,12 @@ import {
     InfoMessage,
 } from './addAlbumStyles';
 
-type album = {
-    data: [
-        {
-            id: number;
-            album_name: string;
-            album_location: string;
-            date: string;
-            person_id: string;
-            album_logo: string;
-        }
-    ];
-    success: true;
-};
+import { albumB } from '~/api/types/album';
 
 export const AddAlbumModal = (props: {
     show: boolean;
     onClose: () => void;
-    onCreationFinish: (albumResponseData: album) => void;
+    onCreationFinish: (albumResponseData: albumB) => void;
 }) => {
     const [album, setAlbum] = useState<string>('');
     const [location, setLocation] = useState<string>('');
@@ -76,7 +64,7 @@ export const AddAlbumModal = (props: {
                     body: JSON.stringify(albumData),
                 });
 
-                const data: album = await response.json();
+                const data: albumB = await response.json();
                 if (data) {
                     props.onCreationFinish(data);
                 }
