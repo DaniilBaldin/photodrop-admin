@@ -17,6 +17,15 @@ export const fetchHook = <T>(method: string, slug: string, body?: BodyInit, head
         headers = {
           ...headers,
           'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': '69420',
+        };
+      }
+
+      if (!body) {
+        headers = {
+          ...headers,
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': '69420',
         };
       }
 
@@ -29,16 +38,15 @@ export const fetchHook = <T>(method: string, slug: string, body?: BodyInit, head
       const response = await fetch(`${baseUrl}${slug}`, reqParams);
 
       const data = await response.json();
-      console.log(data);
 
-      // if (!data.success) {
-      //     setLoading(false);
-      //     throw new Error('No data!');
-      // }
+      if (!data.success) {
+        setLoading(false);
+        throw new Error('No data!');
+      }
 
-      // if (data.success) {
-      //     setData(data);
-      // }
+      if (data.success) {
+        setData(data);
+      }
     } catch (err) {
       setLoading(false);
       setError((err as Error).message);

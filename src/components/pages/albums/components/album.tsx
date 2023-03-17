@@ -16,16 +16,17 @@ export const Album: FC = () => {
   const jwtToken = token(state);
   const method = 'GET';
   const { id } = useParams();
-  const photosSlug = `photos/${id}`;
+  const photosSlug = `photo/all/${id}`;
   const albumSlug = `album/${id}`;
   const header = { Authorization: `Bearer ${jwtToken}` };
   const navigate = useNavigate();
   const [finish, setFinish] = useState<boolean>(false);
 
   const { data, error, loading, apiRequest } = fetchHook<photos>(method, photosSlug, undefined, header);
+  console.log(data);
   const albumData = fetchHook<album>(method, albumSlug, undefined, header);
 
-  const date = albumData.data?.data[0].date;
+  const date = albumData.data?.album.date;
   const formattedDate = (date: string) => {
     if (!date) {
       return '';
@@ -59,8 +60,8 @@ export const Album: FC = () => {
       <HeaderComponent onDone={uploadFinish} />
       <AlbumHeader>
         <AlbumData>
-          <P>Album Name: {albumData.data?.data[0].album_name}</P>
-          <P>Album Location: {albumData.data?.data[0].album_location}</P>
+          <P>Album Name: {albumData.data?.album.name}</P>
+          <P>Album Location: {albumData.data?.album.location}</P>
           <P>Album Date: {formattedDate(date as string)} </P>
         </AlbumData>
         <GoBackButton onClick={goBackHandler}>Go Back</GoBackButton>
@@ -68,9 +69,9 @@ export const Album: FC = () => {
       <AlbumMain>
         <>
           {data?.success ? (
-            data?.data.map((e: photo) => (
-              <div key={e.id}>
-                <PhotoCard src={e.photo_logo} loading="lazy" />
+            data?.photos.map((e: photo, index) => (
+              <div key={index}>
+                <PhotoCard src={e.thumbnailUrl} loading="lazy" />
               </div>
             ))
           ) : (

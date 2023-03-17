@@ -36,8 +36,8 @@ export const AddAlbumModal: FC<Props> = (props) => {
   const baseUrl = import.meta.env.VITE_BASE_URL;
 
   const albumData = {
-    album_name: album,
-    album_location: location,
+    name: album,
+    location: location,
     date: date,
   };
 
@@ -57,11 +57,12 @@ export const AddAlbumModal: FC<Props> = (props) => {
       if (!album || !location || !date) {
         setError('Please, fill out all fields.');
       } else {
-        const response = await fetch(`${baseUrl}album`, {
+        const response = await fetch(`${baseUrl}album/upload`, {
           method: 'POST',
           headers: {
             'content-type': 'application/json',
             Authorization: `Bearer ${jwtToken}`,
+            'ngrok-skip-browser-warning': '69420',
           },
           body: JSON.stringify(albumData),
         });

@@ -7,7 +7,7 @@ import { RootState } from '~/store/index';
 import { token } from '~/store/selectors/tokenSelector';
 import { fetchHook } from '~/components/hooks/fetchHook';
 
-import { AlbumsContainer, AlbumsMain, AlbumButton, AlbumLabel } from './albumsStyles';
+import { AlbumsContainer, AlbumsMain, AlbumButton, AlbumLabel, AlbumName } from './albumsStyles';
 
 import { albumOne, albumB } from '~/api/types/album';
 
@@ -16,7 +16,10 @@ export const Albums: FC = () => {
   const jwtToken = token(state);
   const method = 'GET';
   const slug = 'album/all';
-  const header = { Authorization: `Bearer ${jwtToken}` };
+  const header = {
+    Authorization: `Bearer ${jwtToken}`,
+    'Content-Type': 'application/json; charset=utf-8',
+  };
 
   const [albumData, setAlbumData] = useState<albumB | null>(null);
 
@@ -44,12 +47,13 @@ export const Albums: FC = () => {
       <HeaderComponent onAlbumCreation={albumCreationFinish} />
       <AlbumsMain>
         {data?.success
-          ? data?.data.reverse().map((e: albumOne) => (
+          ? data?.albums.reverse().map((e: albumOne) => (
               <AlbumLabel key={e.id}>
                 <Link to={`/album/${e.id}`}>
-                  <AlbumButton primary={e.album_logo}></AlbumButton>
+                  <AlbumButton primary={e.coverImageUrl}>
+                    <AlbumName>{e.name}</AlbumName>
+                  </AlbumButton>
                 </Link>
-                {e.album_name}
               </AlbumLabel>
             ))
           : 'No Albums'}
