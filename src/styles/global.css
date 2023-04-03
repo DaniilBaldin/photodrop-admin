@@ -1,12 +1,12 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    min-width: 480px;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    background-color: white;
-    overflow-x: hidden;
+  min-width: 320px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: white;
+  overflow-x: hidden;
 }

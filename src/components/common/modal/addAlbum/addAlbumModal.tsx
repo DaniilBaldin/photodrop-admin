@@ -57,7 +57,7 @@ export const AddAlbumModal: FC<Props> = (props) => {
       if (!album || !location || !date) {
         setError('Please, fill out all fields.');
       } else {
-        const response = await fetch(`${baseUrl}album/upload`, {
+        const response = await fetch(`${baseUrl}photographer/album/upload`, {
           method: 'POST',
           headers: {
             'content-type': 'application/json',

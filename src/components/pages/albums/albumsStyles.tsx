@@ -20,7 +20,7 @@ export const AlbumButton = styled.button<{ primary: string }>`
   width: 200px;
   background-color: transparent;
   border-radius: 150px;
-  border: 0.2px solid white;
+  border: 0.2px solid navy;
   background-image: ${(props) => (props.primary ? `url(${props.primary})` : 'linear-gradient( #f9f7f7, navy)')};
   background-repeat: no-repeat;
   background-size: cover;

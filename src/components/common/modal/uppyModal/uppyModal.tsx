@@ -47,7 +47,7 @@ export const UppyModal: FC<Props> = (props) => {
   });
 
   uppy.use(XHRUpload, {
-    endpoint: `${import.meta.env.VITE_BASE_URL}photo/upload`,
+    endpoint: `${import.meta.env.VITE_BASE_URL}photographer/photo/upload`,
     formData: true,
     method: 'POST',
     headers: {

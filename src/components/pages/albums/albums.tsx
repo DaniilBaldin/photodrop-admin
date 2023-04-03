@@ -15,7 +15,7 @@ export const Albums: FC = () => {
   const state = useSelector((state) => (state as RootState).tokenReducer);
   const jwtToken = token(state);
   const method = 'GET';
-  const slug = 'album/all';
+  const slug = 'photographer/album/all';
   const header = {
     Authorization: `Bearer ${jwtToken}`,
     'Content-Type': 'application/json; charset=utf-8',

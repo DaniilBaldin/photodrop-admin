@@ -16,8 +16,8 @@ export const Album: FC = () => {
   const jwtToken = token(state);
   const method = 'GET';
   const { id } = useParams();
-  const photosSlug = `photo/all/${id}`;
-  const albumSlug = `album/${id}`;
+  const photosSlug = `photographer/photo/all/${id}`;
+  const albumSlug = `photographer/album/${id}`;
   const header = { Authorization: `Bearer ${jwtToken}` };
   const navigate = useNavigate();
   const [finish, setFinish] = useState<boolean>(false);
