@@ -7,30 +7,43 @@ import { token } from '~/store/selectors/tokenSelector';
 
 import { Footer, Input, P, CopyButton } from './inputStyles';
 
-import { ClientResponse, ClientsResponse } from '~/api/types/clients';
-
 type Value = null | { value: string; label: string } | Array<{ value: string; label: string }>;
 type ValueSingle = { value: string; label: string };
+
+type Data = {
+  users: {
+    id: number;
+    phoneNumber: string;
+  }[];
+
+  success: boolean;
+};
+
+type User = {
+  id: number;
+  phoneNumber: string;
+};
 
 export const InputSelect = () => {
   const [numbers, setNumbers] = useState<Value>();
   const state = useSelector((state) => (state as RootState).tokenReducer);
   const jwtToken = token(state);
   const method = 'GET';
-  const slug = 'clients';
+  const slug = 'photographer/get-users?limit=100&page=0';
   const header = { Authorization: `Bearer ${jwtToken}` };
 
-  // const { data } = fetchHook<ClientsResponse>(method, slug, undefined, header);
+  const { data } = fetchHook<Data>(method, slug, undefined, header);
   const clientNumbers: ValueSingle[] = [];
 
-  // if (data?.success) {
-  //     data.data.map((e: ClientResponse) => {
-  //         clientNumbers.push({
-  //             value: e.phone_number,
-  //             label: e.phone_number,
-  //         });
-  //     });
-  // }
+  if (data?.success) {
+    console.log(data);
+    data.users.map((e: User) => {
+      clientNumbers.push({
+        value: e.phoneNumber,
+        label: e.phoneNumber,
+      });
+    });
+  }
 
   const handleInput = (value: Value) => {
     setNumbers(value);
