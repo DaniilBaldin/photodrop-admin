@@ -41,10 +41,10 @@ export const UppyModal: FC<Props> = (props) => {
     },
   });
 
-  uppy.use(ThumbnailGenerator, {
-    thumbnailType: 'image/jpeg',
-    waitForThumbnailsBeforeUpload: false,
-  });
+  // uppy.use(ThumbnailGenerator, {
+  //   thumbnailType: 'image/jpeg',
+  //   waitForThumbnailsBeforeUpload: false,
+  // });
 
   uppy.use(XHRUpload, {
     endpoint: `${import.meta.env.VITE_BASE_URL}photographer/photo/upload`,
@@ -62,19 +62,19 @@ export const UppyModal: FC<Props> = (props) => {
     });
   });
 
-  uppy.on('thumbnail:generated', async (files: any, preview: string) => {
-    const name = files.name.replace(/\.[^/.]+$/, '');
-    const extension = files?.type.split('/').pop();
+  // uppy.on('thumbnail:generated', async (files: any, preview: string) => {
+  //   const name = files.name.replace(/\.[^/.]+$/, '');
+  //   const extension = files?.type.split('/').pop();
 
-    const blobfile = await fetch(preview).then((r) => r.blob());
+  //   const blobfile = await fetch(preview).then((r) => r.blob());
 
-    const thumbnail = new File([blobfile], `${name}_thumbnail.${extension}`, {
-      lastModified: new Date().getDate() / new Date().getTime(),
-      type: files.type,
-    });
+  //   const thumbnail = new File([blobfile], `${name}_thumbnail.${extension}`, {
+  //     lastModified: new Date().getDate() / new Date().getTime(),
+  //     type: files.type,
+  //   });
 
-    uppy.setFileMeta(files.id, { thumbnail });
-  });
+  //   uppy.setFileMeta(files.id, { thumbnail });
+  // });
 
   uppy.on('complete', (result) => {
     console.log(result);

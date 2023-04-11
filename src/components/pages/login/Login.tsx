@@ -50,7 +50,7 @@ export const Login: FC = () => {
       }
       if ((data as loginResponse).success && response.ok && !loading) {
         dispatch(addToken((data as loginResponse).token));
-        localStorage.setItem('token', (data as loginResponse).token);
+        localStorage.setItem('tokenJWT', (data as loginResponse).token);
         setLoading(false);
       }
     } catch (err) {

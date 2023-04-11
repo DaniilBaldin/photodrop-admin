@@ -23,7 +23,7 @@ export const HeaderComponent: FC<Props> = (props) => {
     const [show, setShow] = useState(false);
 
     const logOutHAndler = () => {
-        localStorage.setItem('token', '');
+        localStorage.setItem('tokenJWT', '');
         dispatch(resetToken());
     };
 
