@@ -36,10 +36,10 @@ export const Router: FC = () => {
       }
     };
 
-    void getUserAlbums();
-    // if (!albums) {
-    // }
-  }, []);
+    if (jwtToken) {
+      void getUserAlbums();
+    }
+  }, [jwtToken]);
 
   return (
     <Routes>
