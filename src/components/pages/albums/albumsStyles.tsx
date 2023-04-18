@@ -19,9 +19,9 @@ export const AlbumButton = styled.button<{ primary: string }>`
   height: 200px;
   width: 200px;
   background-color: transparent;
-  border-radius: 150px;
-  border: 0.2px solid navy;
-  background-image: ${(props) => (props.primary ? `url(${props.primary})` : 'linear-gradient( #f9f7f7, navy)')};
+  border-radius: 10px;
+  border: 0.2px solid transparent;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.7) 0 100%), url(${'/album.svg'});
   background-repeat: no-repeat;
   background-size: cover;
 `;
@@ -35,6 +35,10 @@ export const AlbumLabel = styled.label`
 `;
 
 export const AlbumName = styled.p`
-  color: #ffffff;
-  z-index: 100;
+  margin-top: 5px;
+  /* margin-bottom: 3px; */
+  color: navy;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 999;
 `;

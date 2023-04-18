@@ -1,8 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '~/store/index';
-import { token } from '~/store/selectors/tokenSelector';
+
+import { tokenSelector } from '~/store/selectors/tokenSelector';
 
 import {
   Modal,
@@ -13,25 +12,29 @@ import {
   ModalLabel,
   ModalInput,
   ModalInputDate,
-  InfoMessage,
 } from './addAlbumStyles';
 
 import { albumB } from '~/api/types/album';
+import { Dispatch, Selector } from '~/store/hooks/hooks';
+import { albumsSelector } from '~/store/selectors/albumsSelector';
+import { addOneAlbum } from '~/store/reducers/albumsReducer';
 
 type Props = {
   show: boolean;
   onClose: () => void;
-  onCreationFinish: (albumResponseData: albumB) => void;
 };
 
 export const AddAlbumModal: FC<Props> = (props) => {
+  const dispatch = Dispatch();
+
   const [album, setAlbum] = useState<string>('');
   const [location, setLocation] = useState<string>('');
   const [date, setDate] = useState<string>('');
-  const [error, setError] = useState<string>('');
 
-  const state = useSelector((state) => (state as RootState).tokenReducer);
-  const jwtToken = token(state);
+  const jwtToken = Selector(tokenSelector);
+  const albums = Selector(albumsSelector);
+
+  const albumId = albums?.slice().reverse()[0];
 
   const baseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -39,6 +42,14 @@ export const AddAlbumModal: FC<Props> = (props) => {
     name: album,
     location: location,
     date: date,
+  };
+  const albumSingle = {
+    id: (albumId?.id as number) + 1,
+    name: album,
+    location: location,
+    date: date,
+    person_id: '',
+    coverImageUrl: '',
   };
 
   const albumChangeHandler = (event: { target: { value: React.SetStateAction<string> } }) => {
@@ -55,7 +66,7 @@ export const AddAlbumModal: FC<Props> = (props) => {
     event.preventDefault();
     try {
       if (!album || !location || !date) {
-        setError('Please, fill out all fields.');
+        alert('Please, fill out all fields.');
       } else {
         const response = await fetch(`${baseUrl}photographer/album/upload`, {
           method: 'POST',
@@ -69,18 +80,25 @@ export const AddAlbumModal: FC<Props> = (props) => {
 
         const data: albumB = await response.json();
         if (data) {
-          props.onCreationFinish(data);
+          dispatch(addOneAlbum(albumSingle));
         }
 
-        setError('');
         props.onClose();
         setAlbum('');
         setLocation('');
         setDate('');
       }
     } catch (err) {
-      setError('Error: sending data was not successfull!');
+      alert('Error: sending data was not successfull!');
     }
+  };
+
+  const closeHandler = (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+    setAlbum('');
+    setLocation('');
+    setDate('');
+    props.onClose();
   };
 
   const closeOnEscapeKeyDown = (e: { charCode: number; keyCode: number }) => {
@@ -97,16 +115,16 @@ export const AddAlbumModal: FC<Props> = (props) => {
   }, []);
 
   return createPortal(
-    <Modal onClick={props.onClose} show={props.show}>
-      <ModalContent onClick={(e) => e.stopPropagation()} onSubmit={formSubmitHandler}>
+    <div>
+      <Modal onClick={closeHandler} show={props.show} />
+      <ModalContent show={props.show} onClick={(e) => e.stopPropagation()} onSubmit={formSubmitHandler}>
         <ModalForm>
           <ModalLabel>
             Album Name
             <ModalInput
               type="text"
               autoComplete="off"
-              minLength={4}
-              maxLength={20}
+              minLength={1}
               value={album}
               required
               onChange={albumChangeHandler}
@@ -117,8 +135,7 @@ export const AddAlbumModal: FC<Props> = (props) => {
             <ModalInput
               type="text"
               autoComplete="off"
-              minLength={4}
-              maxLength={20}
+              minLength={1}
               value={location}
               required
               onChange={locationChangeHandler}
@@ -126,24 +143,31 @@ export const AddAlbumModal: FC<Props> = (props) => {
           </ModalLabel>
           <ModalLabel>
             Album Date
-            <ModalInputDate type="date" value={date} required onChange={dateChangeHandler}></ModalInputDate>
+            <ModalInputDate
+              onClick={(event) => {
+                event.currentTarget.showPicker();
+              }}
+              onFocus={(event) => {
+                event.currentTarget.showPicker();
+              }}
+              type="date"
+              value={date}
+              required
+              onChange={dateChangeHandler}
+              max={new Date().toISOString().split('T')[0]}
+              data-date-inline-picker="false"
+              data-date-open-on-focus="true"
+            ></ModalInputDate>
           </ModalLabel>
-          {error ? (
-            <>
-              <InfoMessage>{error}</InfoMessage>
-            </>
-          ) : (
-            ''
-          )}
         </ModalForm>
         <Footer>
-          <Button onClick={props.onClose}>Cancel</Button>
+          <Button onClick={closeHandler}>Cancel</Button>
           <Button type="submit" onClick={formSubmitHandler}>
             Add album
           </Button>
         </Footer>
       </ModalContent>
-    </Modal>,
+    </div>,
     document.getElementById('root') as HTMLElement,
   );
 };

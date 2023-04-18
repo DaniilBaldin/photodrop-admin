@@ -13,18 +13,29 @@ export const Modal = styled.div<{ open: boolean }>`
   align-items: center;
   justify-content: center;
   opacity: ${(props) => (props.open ? 1 : 0)};
-  transition: all 0.3s ease-in-out;
+  transition: all 0.1s ease-in-out;
   pointer-events: ${(props) => (props.open ? 'auto' : 'none')};
 `;
 
-export const ModalContent = styled.div`
+export const ModalContent = styled.div<{ open: boolean }>`
+  visibility: ${(props) => (props.open ? 'visible' : 'hidden')};
+  opacity: ${(props) => (props.open ? 1 : 0)};
   display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: center;
   width: 750px;
+  height: 605px;
   background-color: white;
-  /* transform: translateY(-100px); */
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 5px;
+  transition: all 0.1s ease-in-out;
 `;
 
 export const Input = styled(Creatable)`

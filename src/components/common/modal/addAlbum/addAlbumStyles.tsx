@@ -11,21 +11,24 @@ export const Modal = styled.div<{ show: boolean }>`
   align-items: center;
   justify-content: center;
   opacity: ${(props) => (props.show ? 1 : 0)};
-  transition: all 0.3s ease-in-out;
+  transition: all 0.1s ease-in-out;
   pointer-events: ${(props) => (props.show ? 'all' : 'none')};
 `;
 
-export const ModalContent = styled.div`
+export const ModalContent = styled.div<{ show: boolean }>`
   width: 400px;
-  /* height: 380px; */
+  height: 350px;
+  visibility: ${(props) => (props.show ? 'visible' : 'hidden')};
+  opacity: ${(props) => (props.show ? 1 : 0)};
   background-color: white;
-  /* display: block;
+  display: block;
   position: absolute;
+  transition: all 0.1s ease-in-out;
   top: 50%;
   right: 0;
   bottom: 0;
   left: 50%;
-  transform: translate(-50%, -50%); */
+  transform: translate(-50%, -50%);
   border-radius: 20px;
 `;
 
@@ -78,7 +81,8 @@ export const ModalInput = styled.input`
 
   &:focus {
     border-radius: 20px;
-    border: 2px solid blue;
+    border: 3px solid blue;
+    background-color: #f5f2f2;
     outline: none;
   }
 `;
@@ -94,11 +98,12 @@ export const ModalInputDate = styled.input`
 
   &:focus {
     border-radius: 20px;
-    border: 2px solid blue;
+    border: 3px solid blue;
+    background-color: #f5f2f2;
     outline: none;
   }
 `;
 export const InfoMessage = styled.p`
-  font-size: 10px;
+  font-size: 15px;
   color: navy;
 `;

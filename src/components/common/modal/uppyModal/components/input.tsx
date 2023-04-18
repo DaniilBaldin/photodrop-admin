@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { fetchHook } from '~/components/hooks/fetchHook';
-import { RootState } from '~/store';
-import { token } from '~/store/selectors/tokenSelector';
+import { tokenSelector } from '~/store/selectors/tokenSelector';
 
 import { Footer, Input, P, CopyButton } from './inputStyles';
+import { Selector } from '~/store/hooks/hooks';
 
 type Value = null | { value: string; label: string } | Array<{ value: string; label: string }>;
 type ValueSingle = { value: string; label: string };
@@ -26,8 +25,9 @@ type User = {
 
 export const InputSelect = () => {
   const [numbers, setNumbers] = useState<Value>();
-  const state = useSelector((state) => (state as RootState).tokenReducer);
-  const jwtToken = token(state);
+
+  const jwtToken = Selector(tokenSelector);
+
   const method = 'GET';
   const slug = 'photographer/get-users?limit=100&page=0';
   const header = { Authorization: `Bearer ${jwtToken}` };

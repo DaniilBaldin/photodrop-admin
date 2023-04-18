@@ -9,6 +9,9 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@reduxjs/toolkit": "^1.9.3",
+        "@types/react-alert": "^7.0.2",
+        "@types/react-datepicker": "^4.10.0",
         "@types/react-lazy-load-image-component": "^1.5.2",
         "@types/react-redux": "^7.1.25",
         "@types/redux": "^3.6.0",
@@ -22,6 +25,10 @@
         "@uppy/react": "^3.1.0",
         "@uppy/xhr-upload": "^3.0.4",
         "react": "^18.2.0",
+        "react-alert": "^7.0.3",
+        "react-alert-template-basic": "^1.0.2",
+        "react-alert-template-mui": "^1.0.7",
+        "react-datepicker": "^4.11.0",
         "react-dom": "^18.2.0",
         "react-lazy-load-image-component": "^1.5.6",
         "react-redux": "^8.0.5",

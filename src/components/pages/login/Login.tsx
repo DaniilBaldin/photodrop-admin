@@ -1,19 +1,17 @@
 import React, { FC, useState } from 'react';
 
-import { useDispatch } from 'react-redux';
-import { addToken } from '~/store/actions/actions';
-
-import { MainPage, TextTitle, LoginForm, LoginLabel, Input, LoginButton, InfoMessage } from './loginStyles';
+import { MainPage, LoginForm, LoginLabel, Input, LoginButton, InfoMessage } from './loginStyles';
 
 import { loginResponse, errorResponse } from '~/api/types/login';
+import { Dispatch } from '~/store/hooks/hooks';
+import { addToken } from '~/store/reducers/tokenReducer';
 
 export const Login: FC = () => {
   const [login, setLogin] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean | null>(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const dispatch = useDispatch();
+  // const [error, setError] = useState<string | null>(null);
+  const dispatch = Dispatch();
 
   const baseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -42,11 +40,10 @@ export const Login: FC = () => {
       });
 
       const data: loginResponse | errorResponse = await response.json();
-      console.log(data);
 
       if (!(data as loginResponse).success && !response.ok) {
         setLoading(false);
-        throw new Error((data as errorResponse).message);
+        alert((data as errorResponse).message);
       }
       if ((data as loginResponse).success && response.ok && !loading) {
         dispatch(addToken((data as loginResponse).token));
@@ -55,17 +52,16 @@ export const Login: FC = () => {
       }
     } catch (err) {
       setLoading(false);
-      setError((err as Error).message);
+      alert('Invalid login or password!');
     }
 
-    setLogin('');
-    setPassword('');
+    // setLogin('');
+    // setPassword('');
   };
 
   return (
     <MainPage>
       <LoginForm onSubmit={formSubmitHandler}>
-        <TextTitle>Please, log in.</TextTitle>
         <LoginLabel htmlFor="login">
           Login
           <Input
@@ -97,13 +93,6 @@ export const Login: FC = () => {
         {loading ? (
           <>
             <InfoMessage>Loading...</InfoMessage>
-          </>
-        ) : (
-          ''
-        )}
-        {error ? (
-          <>
-            <InfoMessage>{error}</InfoMessage>
           </>
         ) : (
           ''

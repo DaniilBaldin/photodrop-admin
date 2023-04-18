@@ -1,45 +1,53 @@
-import React, { FC, FunctionComponent } from 'react';
+import React, { FC, FunctionComponent, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Layout } from '~/components/common/layout/Layout';
 
 import { routes, protectedRoutes } from './routes';
 
-import { useSelector } from 'react-redux';
-
-import { token } from '~/store/selectors/tokenSelector';
-import { RootState } from '~/store/index';
+import { tokenSelector } from '~/store/selectors/tokenSelector';
+import { Dispatch, Selector } from '~/store/hooks/hooks';
+import { addAlbum } from '~/store/reducers/albumsReducer';
 
 type RouterType = {
-    path: string;
-    element: FunctionComponent;
+  path: string;
+  element: FunctionComponent;
 };
 
 export const Router: FC = () => {
-    const state = useSelector((state) => (state as RootState).tokenReducer);
-    const jwtToken = token(state);
+  const jwtToken = Selector(tokenSelector);
+  const dispatch = Dispatch();
 
-    return (
-        <Routes>
-            <Route
-                path='/'
-                element={<Layout />}
-            >
-                {!jwtToken
-                    ? routes.map((e: RouterType, index) => (
-                          <Route
-                              key={index}
-                              path={e.path}
-                              element={<e.element />}
-                          />
-                      ))
-                    : protectedRoutes.map((e: RouterType, index) => (
-                          <Route
-                              key={index}
-                              path={e.path}
-                              element={<e.element />}
-                          />
-                      ))}
-            </Route>
-        </Routes>
-    );
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+
+  useEffect(() => {
+    const getUserAlbums = async () => {
+      const response = await fetch(`${baseUrl}photographer/album/all`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${jwtToken}`,
+          'ngrok-skip-browser-warning': '69420',
+        },
+        body: undefined,
+      });
+      const data = await response.json();
+      if (data) {
+        dispatch(addAlbum(data?.albums));
+      }
+    };
+
+    void getUserAlbums();
+    // if (!albums) {
+    // }
+  }, []);
+
+  return (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        {!jwtToken
+          ? routes.map((e: RouterType, index) => <Route key={index} path={e.path} element={<e.element />} />)
+          : protectedRoutes.map((e: RouterType, index) => <Route key={index} path={e.path} element={<e.element />} />)}
+      </Route>
+    </Routes>
+  );
 };

@@ -1,24 +1,21 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useParams } from 'react-router-dom';
 
-import { useSelector } from 'react-redux';
-import { RootState } from '~/store';
-import { token } from '~/store/selectors/tokenSelector';
+import { tokenSelector } from '~/store/selectors/tokenSelector';
 
 import { InputSelect } from './components/input';
 
 import Uppy from '@uppy/core';
 import Dashboard from '@uppy/react/lib/Dashboard.js';
 import XHRUpload from '@uppy/xhr-upload';
-import ThumbnailGenerator from '@uppy/thumbnail-generator';
 
 import { Modal, ModalContent } from './uppyStyles';
 
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 import '@uppy/drag-drop/dist/style.css';
+import { Selector } from '~/store/hooks/hooks';
 
 interface Props {
   open: boolean;
@@ -27,8 +24,7 @@ interface Props {
 
 export const UppyModal: FC<Props> = (props) => {
   const { id } = useParams();
-  const state = useSelector((state) => (state as RootState).tokenReducer);
-  const jwtToken = token(state);
+  const jwtToken = Selector(tokenSelector);
 
   const uppy = new Uppy({
     debug: true,
@@ -40,11 +36,6 @@ export const UppyModal: FC<Props> = (props) => {
       allowedFileTypes: ['.jpg', '.jpeg', '.heic'],
     },
   });
-
-  // uppy.use(ThumbnailGenerator, {
-  //   thumbnailType: 'image/jpeg',
-  //   waitForThumbnailsBeforeUpload: false,
-  // });
 
   uppy.use(XHRUpload, {
     endpoint: `${import.meta.env.VITE_BASE_URL}photographer/photo/upload`,
@@ -61,20 +52,6 @@ export const UppyModal: FC<Props> = (props) => {
       albumId: `${id}`,
     });
   });
-
-  // uppy.on('thumbnail:generated', async (files: any, preview: string) => {
-  //   const name = files.name.replace(/\.[^/.]+$/, '');
-  //   const extension = files?.type.split('/').pop();
-
-  //   const blobfile = await fetch(preview).then((r) => r.blob());
-
-  //   const thumbnail = new File([blobfile], `${name}_thumbnail.${extension}`, {
-  //     lastModified: new Date().getDate() / new Date().getTime(),
-  //     type: files.type,
-  //   });
-
-  //   uppy.setFileMeta(files.id, { thumbnail });
-  // });
 
   uppy.on('complete', (result) => {
     console.log(result);
@@ -94,8 +71,9 @@ export const UppyModal: FC<Props> = (props) => {
   }, []);
 
   return createPortal(
-    <Modal onClick={props.onClose} open={props.open}>
-      <ModalContent onClick={(e: { stopPropagation: () => unknown }) => e.stopPropagation()}>
+    <div>
+      <Modal onClick={props.onClose} open={props.open} />
+      <ModalContent open={props.open} onClick={(e: { stopPropagation: () => unknown }) => e.stopPropagation()}>
         <div>
           <Dashboard
             uppy={uppy}
@@ -113,7 +91,7 @@ export const UppyModal: FC<Props> = (props) => {
         </div>
         <InputSelect />
       </ModalContent>
-    </Modal>,
+    </div>,
     document.getElementById('root') as HTMLElement,
   );
 };

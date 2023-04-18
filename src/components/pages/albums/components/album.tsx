@@ -1,19 +1,18 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { RootState } from '~/store';
-import { token } from '~/store/selectors/tokenSelector';
+import { tokenSelector } from '~/store/selectors/tokenSelector';
 import { fetchHook } from '~/components/hooks/fetchHook';
 import { HeaderComponent } from '~/components/common/header/header';
 
-import { AlbumContainer, AlbumMain, AlbumHeader, GoBackButton, AlbumData, P, PhotoCard } from './albumStyles';
+import { AlbumContainer, AlbumMain, AlbumHeader, GoBackButton, AlbumData, P, Photos } from './albumStyles';
 
 import { album, photos, photo } from '~/api/types/album';
+import { Selector } from '~/store/hooks/hooks';
 
 export const Album: FC = () => {
-  const state = useSelector((state) => (state as RootState).tokenReducer);
-  const jwtToken = token(state);
+  const jwtToken = Selector(tokenSelector);
+
   const method = 'GET';
   const { id } = useParams();
   const photosSlug = `photographer/photo/all/${id}`;
@@ -22,8 +21,8 @@ export const Album: FC = () => {
   const navigate = useNavigate();
   const [finish, setFinish] = useState<boolean>(false);
 
-  const { data, error, loading, apiRequest } = fetchHook<photos>(method, photosSlug, undefined, header);
-  console.log(data);
+  const { data, apiRequest } = fetchHook<photos>(method, photosSlug, undefined, header);
+
   const albumData = fetchHook<album>(method, albumSlug, undefined, header);
 
   const date = albumData.data?.album.date;
@@ -35,25 +34,17 @@ export const Album: FC = () => {
   };
 
   const uploadFinish = (value: boolean) => {
+    apiRequest();
     setFinish(value);
   };
 
   useEffect(() => {
-    apiRequest();
     setFinish(false);
   }, [finish]);
 
   const goBackHandler = () => {
     navigate(-1);
   };
-
-  if (!data && loading) {
-    return <h4>Loading...</h4>;
-  }
-
-  if (error) {
-    return <h4>Error:fetching albums photos not successfull.</h4>;
-  }
 
   return (
     <AlbumContainer>
@@ -68,15 +59,14 @@ export const Album: FC = () => {
       </AlbumHeader>
       <AlbumMain>
         <>
-          {data?.success ? (
-            data?.photos.map((e: photo, index) => (
-              <div key={index}>
-                <PhotoCard src={e.thumbnailUrl} loading="lazy" />
-              </div>
-            ))
-          ) : (
-            <P>{'No Photos'}</P>
-          )}
+          <P>Photos:</P>
+          <Photos>
+            {data?.photos.length ? (
+              data?.photos.map((e: photo, index) => <P key={index}>- {e.name}</P>)
+            ) : (
+              <P>No Photos</P>
+            )}
+          </Photos>
         </>
       </AlbumMain>
     </AlbumContainer>
